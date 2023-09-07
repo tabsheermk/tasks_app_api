@@ -4,6 +4,7 @@ import taskRouter from "./routes/tasks.js";
 import { config } from "dotenv";
 import cookieParser from "cookie-parser";
 import { errorMiddleware } from "./middlewares/error.js";
+import cors from "cors";
 
 export const app = express();
 
@@ -12,6 +13,13 @@ config({ path: "./data/config.env" });
 //using middlewares
 app.use(express.json());
 app.use(cookieParser());
+app.use(
+  cors({
+    origin: [process.env.FRONTEND_URL],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true, //need to set this true to be able to send cookies and track them
+  })
+);
 
 //using routes
 app.use("/api/v1/users", userRouter);
